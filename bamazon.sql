@@ -17,7 +17,7 @@ insert into products (product_name, department_name, price, stock_quantity)
 values("pencil", "office", 0.5, 3000);
 
 insert into products (product_name, department_name, price, stock_quantity)
-values("legging", "women clothing", 15, 1000);
+values("legging", "women clothing", 15, 100);
 
 insert into products (product_name, department_name, price, stock_quantity)
 values("tie", "men clothing", 20, 1500);

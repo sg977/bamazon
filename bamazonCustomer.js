@@ -6,7 +6,7 @@
 
 
 var mysql = require("mysql");
-var inquirer = require("inquier");
+var inquirer = require("inquirer");
 var columnify = require('columnify');
 
 //create the connection information for the SQL database
@@ -23,12 +23,6 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
 });
 
-//connect to the mysql server and sql database  
-connection.connect(function(err) {
-    if (err) throw err;
-    //run the start function after the connection is made to prompt the user
-    start();
-});
 
 //show inventory
 function showInventory() {
@@ -38,7 +32,7 @@ function showInventory() {
     //only display items in stock
     connection.query ('SELECT * FROM products WHERE stock_quantity != 0', function(error,results) {
         if(error) throw error;
-        console.log(columnify(results, {columns:['id', 'product_name', 'department_name', 'price', 'stock_quantity']}))
+        console.log(columnify(results, {columns:['id', 'product_name', 'department_name', 'price', 'stock_quantity']}));
 
         //removes RowDataPacket
         var newResults = JSON.parse(JSON.stringify(results));
@@ -47,9 +41,13 @@ function showInventory() {
         newResults.forEach((element) => {
             product_catalog_names.push(element.product_name);
         }, this); 
-        //have to console log and ttest out this 
+        //console.log(this); 
+        //have to console log and test out this 
         newResults.forEach((element) => {
+
             product_catalog.push(element);
+            //test
+            //console.log(element);
         }, this); 
 
         purchase(product_catalog, product_catalog_names);
@@ -75,7 +73,7 @@ function purchase(product_catalog, product_catalog_names) {
         message: "How many units would you like to purchase?",
         type:"input",
         validate: (value) => {
-            var valid = !isNan(parseFloat(value));
+            var valid = !isNaN(parseFloat(value));
             return valid || "Please enter a number"
         }
     }
@@ -94,11 +92,24 @@ function purchase(product_catalog, product_catalog_names) {
     } else {
         //store current stock amoount
         var current_quantity = chosenProduct.stock_quantity - answers.purchase_amount;
+        //console.log(current_quantity); 
         var totalSale = Math.round(answers.purchase_amount*chosenProduct.price);
-        var increaseSale = Math.round()
+        var increaseSale = Math.round(chosenProduct.product_sales) + totalSale;
+
+        //update DB
+        connection.query(`UPDATE products SET stock_quantity=${current_quantity} WHERE id= ${chosenId}`, function(error, results) {
+            console.log('Items purchsed:\n');
+            console.log(`${chosenProduct.product_name} = ${chosenProduct.price * answers.purchase_amount}\n`);
+            console.log(`Your total will be: $${chosenProduct.price * answers.purchase_amount}\n`);
+            
+           showInventory(); 
+
+        })
     }
-})
+});
 }
+
+showInventory(); 
 
 
 // Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
