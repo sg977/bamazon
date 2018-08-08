@@ -8,14 +8,15 @@ The first should ask them the ID of the product they would like to buy.
 The second message should ask how many units of the product they would like to buy.
 
 Result:
+Below is the screeshot of the result, please refer to the hightlight, that I requested 30 pairs of leggings, it gave me total price and also updated stock_quantity for me 
 ![image](https://user-images.githubusercontent.com/36526894/43847895-bb1f876e-9aff-11e8-8311-6163595f5917.png)
 
 
 Required technology: 
--Node.js
--Inquirer 
--MySQL
--Columnify 
+-<a href="https://nodejs.org/api/modules.html>Node.js</a>
+-<a href="https://www.npmjs.com/package/inquirer">Inquirer</a>
+-<a href="https://www.npmjs.com/package/mysql">MySQL</a>
+-<a href="https://www.npmjs.com/search?q=Columnify">Columnify</a>
 
 
 
