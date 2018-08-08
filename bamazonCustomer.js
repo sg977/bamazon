@@ -7,6 +7,7 @@
 
 var mysql = require("mysql");
 var inquirer = require("inquier");
+var columnify = require('columnify');
 
 //create the connection information for the SQL database
 
@@ -29,27 +30,74 @@ connection.connect(function(err) {
     start();
 });
 
-
-//start function
-function start() {
-    inquirer
-    .prompt([
-        {
-            name:"itemId",
-            type:"input",
-            message: "what is the ID of the product you would like to buy"
-        },
-        {
-            name:"unitOfProduct",
-            type: "input",
-            message: "how many units of the product you would like to buy"
-        }
-    ])
+//show inventory
+function showInventory() {
+    var product_catalog = [];
+    var product_catalog_names = [];
     
-    .then(function(answer) {
-        //when finished prompting, update the table 
-    })
+    //only display items in stock
+    connection.query ('SELECT * FROM products WHERE stock_quantity != 0', function(error,results) {
+        if(error) throw error;
+        console.log(columnify(results, {columns:['id', 'product_name', 'department_name', 'price', 'stock_quantity']}))
 
+        //removes RowDataPacket
+        var newResults = JSON.parse(JSON.stringify(results));
+
+        //store data in new arrays for catalog selection
+        newResults.forEach((element) => {
+            product_catalog_names.push(element.product_name);
+        }, this); 
+        //have to console log and ttest out this 
+        newResults.forEach((element) => {
+            product_catalog.push(element);
+        }, this); 
+
+        purchase(product_catalog, product_catalog_names);
+        
+    });
+
+}
+
+
+//purchase 
+function purchase(product_catalog, product_catalog_names) {
+    console.log("");
+    inquirer.prompt([{
+        name: "id",
+        message: "Which product would you like to purchase?",
+        type: "list",
+        choices: product_catalog_names,
+
+
+    },
+    {
+        name:"purchase_amount",
+        message: "How many units would you like to purchase?",
+        type:"input",
+        validate: (value) => {
+            var valid = !isNan(parseFloat(value));
+            return valid || "Please enter a number"
+        }
+    }
+]).then(function(answers) {
+    //referenced id for chosen product
+    var chosenId = product_catalog_names.indexOf(answers.id)+1;
+
+    //store product selected by user to edit db 
+    var chosenProduct = product_catalog[chosenId -1];
+
+    //validate if the product is in stock
+    if (chosenProduct.stock_quantity<answers.purchase_amount) {
+        console.log('Insufficient quantity!')
+
+        purchase(product_catalog, product_catalog_names);
+    } else {
+        //store current stock amoount
+        var current_quantity = chosenProduct.stock_quantity - answers.purchase_amount;
+        var totalSale = Math.round(answers.purchase_amount*chosenProduct.price);
+        var increaseSale = Math.round()
+    }
+})
 }
 
 
