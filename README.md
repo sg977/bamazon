@@ -13,10 +13,10 @@ Below is the screeshot of the result, please refer to the hightlight, that I req
 
 
 Required technology: 
--<a href="https://nodejs.org/api/modules.html>Node.js</a>
--<a href="https://www.npmjs.com/package/inquirer">Inquirer</a>
--<a href="https://www.npmjs.com/package/mysql">MySQL</a>
--<a href="https://www.npmjs.com/search?q=Columnify">Columnify</a>
+-<a href="https://nodejs.org/api/modules.html">Node.js</a>\n
+-<a href="https://www.npmjs.com/package/inquirer">Inquirer</a>\n
+-<a href="https://www.npmjs.com/package/mysql">MySQL</a>\n
+-<a href="https://www.npmjs.com/search?q=Columnify">Columnify</a>\n
 
 
 
